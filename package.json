@@ -1,0 +1,23 @@
+{
+	"author": "Raoul Millais <raoul@raoulmillais.com>",
+	"name": "linksharing-api",
+	"description": "Hypermedia Linksharing API",
+	"version": "0.0.0",
+	"repository": {
+		"url": ""
+	},
+	"main": "index.js",
+	"scripts": {
+		"test": "mocha spec"
+	},
+	"dependencies": {
+		"restify": "1.4.0"
+	},
+	"devDependencies": {
+		"mocha": "latest"
+	},
+	"optionalDependencies": {},
+	"engines": {
+		"node": ">=0.6.14"
+	}
+}

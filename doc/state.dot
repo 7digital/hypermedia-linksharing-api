@@ -1,0 +1,9 @@
+digraph {
+	start[label="home"];
+	contacts[label="retrieve contacts"];
+	share[label="share a link"]
+
+	start -> contacts;
+	contacts -> share;
+	share -> start;
+}
