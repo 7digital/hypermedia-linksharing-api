@@ -1,24 +1,21 @@
 Link Sharing Hypermedia API
 ===========================
 
-There is a sample client in the examples folder to demonstrate how this works
-on the client.  The client is used like this:
+There is a client in the clients folder to demonstrate how this works.  The
+client is used like this:
 
 ```JavaScript
 var linkApiClient = new SevenDigitalLinkApiClient('http://localhost:8080');
 
 linkApiClient.start(function (err, home) {
-		if (err) {
-		console.dir(err);
-		return;
-		}
+		if (err)
+			return console.error(err);
 
 		home.getContacts(function (err, contacts) {
-			if (err) {
-			console.error(err);
-			return;
-			}
-			contacts.sendLink([ 'someid', 'anotherid' ], 'http://blah',	function (err, linkSent) {
+			if (err)
+				return console.error(err);
+
+			contacts.sendLink([ 'someid', 'anotherid' ], 'http://blah', function (err, linkSent) {
 				console.log('Link sent');
 				});
 			});
