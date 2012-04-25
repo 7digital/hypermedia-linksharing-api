@@ -1,8 +1,42 @@
 Link Sharing Hypermedia API
 ===========================
 
-There is a client in the clients folder to demonstrate how this works.  The
-client is used like this:
+Some Background
+---------------
+
+I've written the nodejs API client, made significant changes to the C# client
+and played around with the twitter API, joyent's API, github's API and some
+others.  Almost all of my experience in doing so has been fiddly and tedious!
+
+Reading more about Hypermedia APIs (aka truly RESTful servies), I have become
+more and more convinced that this technique removes a lot of this tedium.
+
+Inspired by the Steve Klabnik talk I sent round on the weekend I thought it would be useful
+to work through a real world example.  Rather than tackle our problem domain and
+to avoid getting bogged down in the nuts and bolts of our system I have
+used a simple link sharing example.
+
+There are 2 clients in the clients folder.  A reference client for communicating
+with the hypermedia API to demonstrate how this works and a twitter client for
+comparison and to demonstrate how much extra coupling and logic is required when
+not designing your API using this technique.
+
+**BIG FAT CAVEAT**
+
+At the time of writing the twitter client may not work as I haven't fully tested
+it! :( Also due to having to do the oauth dance, the twitter client is necessarily
+more complex in respect of authorisation and I had to use a module loader and oauth
+library.  My hope is that this isn't to distracting and the code is close enough
+to show the concepts.
+
+I've separated the urls at the top to show the URL coupling and if you look at
+the statusUpdate, friendIds and userlookup calls you will see the hardcoded
+templating logic.
+
+If this is proving problematic, when I get some more time, I'll test it all
+properly and extract the templating logic to make it more explicit.
+
+You can use the reference client like this:
 
 ```JavaScript
 var linkApiClient = new SevenDigitalLinkApiClient('http://localhost:8080');
@@ -22,7 +56,7 @@ linkApiClient.start(function (err, home) {
 		});
 ```
 
-You can run the API server by doing:
+You can run the API stub server by doing:
 
     npm install
     node server.js
