@@ -6,6 +6,15 @@ define(function (require, exports, module) {
 			consumerKey: 'YOUR_KEY_HERE',
 			consumerSecret: 'YOUR_SECRET_HERE',
 			callbackUrl:  '/oauth-callback.html'
+		},
+		urls = {
+			oauthRequestToken: 'https://api.twitter.com/oauth/request_token',
+			oauthAuthorizeToken: 'https://api.twitter.com/oauth/authorize?',
+			oauthVerifyToken: 'https://api.twitter.com/oauth/authorize',
+			verifyCredentials: 'https://api.twitter.com/1/account/verify_credentials.json?skip_status=true',
+			getFriendIds: 'https://api.twitter.com/1/friends/ids.json',
+			lookupUsers: 'https://api.twitter.com/1/users/lookup.json',
+			updateStatus: 'https://api.twitter.com/1/statuses/update.json'
 		};
 
 	function TwitterApi() {
@@ -15,13 +24,12 @@ define(function (require, exports, module) {
 	TwitterApi.prototype.authorise = function authorise(cb) {
 		var credentials, self = this;
 
-		this.oauth.get('https://api.twitter.com/oauth/request_token',
-					function handleRequestTokenResponse(data) {
+		this.oauth.get(urls.oauthRequestToken, function handleRequestTokenResponse(data) {
 			var ctx = self,
 				reqParams = data.text,
 				callback = cb;
 
-			var authWindow = window.open('https://api.twitter.com/oauth/authorize?' + data.text);
+			var authWindow = window.open(urls.oauthAuthorizeToken + '?' + data.text);
 			// TODO: Handle token
 		});
 	};
@@ -49,8 +57,7 @@ define(function (require, exports, module) {
 	TwitterApi.prototype.verifyToken = function (token, verifier, reqParams, cb) {
 		var self = this, callback = cb;
 
-		this.oauth.get(
-			'https://api.twitter.com/oauth/access_token?oauth_verifier='+ verifier +'&' + reqParams,
+		this.oauth.get(urls.oauthVerifyToken + '?oauth_verifier='+ verifier +'&' + reqParams,
 			function handleAccessTokenResponse(data) {
 				var accessParams = {},
 					qvars_tmp = data.text.split('&');
@@ -77,7 +84,7 @@ define(function (require, exports, module) {
 	TwitterApi.prototype.start = function initialise(cb) {
 		var self = this;
 
-		this.oauth.get('https://api.twitter.com/1/account/verify_credentials.json?skip_status=true',
+		this.oauth.get(urls.verifyCredentials,
 			function handleCredentialsResponse(data) {
 				var entry, item, parsedItem;
 
@@ -92,7 +99,7 @@ define(function (require, exports, module) {
 	TwitterApi.prototype.getContacts = function getContacts(handle, cb){
 		var screenName, item,  parsedItem, url, self = this;
 
-		url = "https://api.twitter.com/1/friends/ids.json?&screen_name=" + handle;
+		url = urls.getFriendIds + '?&screen_name=' + handle;
 		this.oauth.get(url, function handleFriendsIdsResponse(data) {
 			var res, friendIds, idString = '', url, i;
 
@@ -105,8 +112,8 @@ define(function (require, exports, module) {
 				if (i !== 99) idString += ',';
 			}
 
-			url = 'https://api.twitter.com/1/users/lookup.json?user_id=' + idString;
-			self.oauth.get(url, function handleUserLookupResponse(data) {
+			self.oauth.get(urls.lookupUsers + '?user_id=' + idString, 
+						function handleUserLookupResponse(data) {
 				var users, item, parsedItem;
 
 				users = JSON.parse(data.text);
@@ -122,9 +129,8 @@ define(function (require, exports, module) {
 	TwitterApi.prototype.sendLink = function (message) {
 		var url, status;
 		status = encodeURICompenent('@' + message.recipient + ' ' + message.link);
-		url = 'https://api.twitter.com/1/statuses/update.json';
 
-		self.oauth.post(url, { status: status }, function handleStatusUpdateResponse(data) {
+		self.oauth.post(urls.updateStatus, { status: status }, function handleStatusUpdateResponse(data) {
 			var statusResponse, parsedResponse;
 
 			parsedResponse = JSON.parse(statusResponse);
