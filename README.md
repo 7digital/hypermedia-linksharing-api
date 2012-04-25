@@ -53,11 +53,6 @@ These resources **MUST** have these keys:
 * `id` *string*
 * `handle` *string*
 * `fullName` *string*
-* `network` *network*
-
-The `network` key will hold a network resource which **MUST** have the following keys:
-* `id` *string*
-* `displayName` *string*
 
 A response **MAY** include a links key which is an array of objects. These
 objects **MUST** have these keys:
