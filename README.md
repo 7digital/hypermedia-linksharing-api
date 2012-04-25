@@ -28,7 +28,7 @@ linkApiClient.start(function (err, home) {
 You can run the API server by doing:
 
     npm install
-    node index.js
+    node server.js
 
 The Workflow
 ------------
